@@ -3,6 +3,7 @@ const { ApplicationCommandOptionType, EmbedBuilder } = require('discord.js');
 const controlChannel = require('../../utils/controlChannel');
 const embedForLogs = require('../../utils/embedForLogs');
 const LogsError = require('../../utils/LogsError');
+const fetch = require("node-fetch");
 
 module.exports = {
     name: "steam-stats",
@@ -28,16 +29,16 @@ module.exports = {
             function handleStatoSteam(params) {
                 switch (params) {
                     case 0:
-                        return "Offline"
+                        return "Offline ⬛"
 
                     case 1:
-                        return "Online"
+                        return "Online 🟩"
 
                     case 2:
-                        return "Occupato"
+                        return "Occupato 🟥"
 
                     case 3:
-                        return "Away"
+                        return "Away 🟨"
 
                     case 4:
                         return "Snooze"
@@ -54,6 +55,7 @@ module.exports = {
             }
 
             if (controlChannel(interaction)) {
+                console.info(`[${interaction.commandName.toUpperCase()}] ${interaction.user.username}`)
                 let embed = new EmbedBuilder();
 
                 const steamId = interaction.options.get('steam-id').value;

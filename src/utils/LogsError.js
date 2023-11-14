@@ -10,5 +10,5 @@ module.exports = (client, interaction, error) => {
             { name: `Errore:`, value: error.toString(), inline: false });
 
             //ID CANALE LOGS ERROR
-    client.channels.cache.get("1115066343750897716").send({ embeds: [embedLog] })
+    client.channels.cache.get("1174066556364402739").send({ embeds: [embedLog] })
 }

@@ -25,6 +25,7 @@ module.exports = {
 
     callback:  (client, interaction) => {
         try {
+            console.info(`[${interaction.commandName.toUpperCase()}] ${interaction.user.username}`)
             const vittima = interaction.options.get('vittima').user.username;
 
             if (controlChannel(interaction)) {

@@ -5,21 +5,17 @@ const embedForLogs = require('../../utils/embedForLogs');
 const LogsError = require('../../utils/LogsError');
 
 module.exports = {
-    name: "ping",
-    description: "Riponde con pong!",
-    // devOnly: Boolean
-    // testOnly: Boolean
-    // options: Object[]
-    // deleted: true
+    name: "help",
+    description: "Lista comandi",
 
     callback: (client, interaction) => {
 
-        // console.log(interaction)
         try {
             if (controlChannel(interaction)) {
                 console.info(`[${interaction.commandName.toUpperCase()}] ${interaction.user.username}`)
-                // interaction.reply(`PONG!!! ${client.ws.ping}ms`)
-                interaction.reply(`PONG!!!`)
+                interaction.reply("/help - Visualizza tutti i comandi /steam-stats - Visualizza le statistiche di steam", mention_author=true)
+                interaction.reply("/help - Visualizza tutti i comandi /steam-stats - Visualizza le statistiche di steam", mention_author=true)
+                interaction.reply("/help - Visualizza tutti i comandi /steam-stats - Visualizza le statistiche di steam", mention_author=true)
                 embedForLogs(client, interaction)
             }
 

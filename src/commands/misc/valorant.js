@@ -1,8 +1,9 @@
 require('dotenv').config()
-const { ApplicationCommandOptionType, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require('discord.js');
+const { ApplicationCommandOptionType, EmbedBuilder } = require('discord.js');
 const controlChannel = require('../../utils/controlChannel');
 const embedForLogs = require('../../utils/embedForLogs');
 const LogsError = require('../../utils/LogsError');
+const fetch = require("node-fetch");
 
 function handleEmbedMatches(data, imageUrl, nome) {
 
@@ -65,6 +66,7 @@ module.exports = {
 
         try {
             if (controlChannel(interaction)) {
+                console.info(`[${interaction.commandName.toUpperCase()}] ${interaction.user.username}`)
                 let embed = new EmbedBuilder();
 
                 const nome = interaction.options.get('nome').value.toString();
@@ -79,8 +81,6 @@ module.exports = {
 
                 const responseElo = await fetch(`https://api.henrikdev.xyz/valorant/v1/mmr/eu/${encodeURI(nome)}/${encodeURI(id)}`)
                 let dataElo = await responseElo.json()
-                console.log(dataElo)
-                console.log(dataMatch)
 
                 if (dataProfile.status !== 200 && dataElo.status !== 200) {
                     console.log("Non trovato");
@@ -96,15 +96,6 @@ module.exports = {
 
                 } else {
 
-                    const confirm = new ButtonBuilder()
-                        .setCustomId('confirm')
-                        .setLabel('Visualizza ultime 5 partite')
-                        .setStyle(ButtonStyle.Primary);
-
-                    const row = new ActionRowBuilder()
-                        .addComponents(confirm);
-
-
                     embed = new EmbedBuilder().setTitle(`Statistiche di valorant di: ${nome}`)
                         .setDescription(`Valorant stats`)
                         .setColor("Blue")
@@ -117,23 +108,10 @@ module.exports = {
                         )
                         .setImage(dataProfile.data.card.wide);
 
-                    await interaction.reply({
-                        components: [row],
-                        embeds: [embed]
+                     interaction.reply({
+                        embeds: [embed, handleEmbedMatches(dataMatch.data, dataProfile.data.card.wide, nome)]
                     });
                     embedForLogs(client, interaction)
-                }
-                try {
-                    const collector = interaction.channel.createMessageComponentCollector();
-
-                    collector.on('collect', async i => {
-
-                        await i.update({ embeds: [embed, handleEmbedMatches(dataMatch.data, dataProfile.data.card.wide, nome)], components: [] })
-                    })
-
-                } catch (error) {
-                    console.log(error)
-                    LogsError(client, interaction, error)
                 }
 
             }
